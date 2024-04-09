@@ -115,21 +115,26 @@ make_release_filename() {
     printf "%s/%s%s%s.%s\n" "$RELEASE_DIR" "$dirpart" "$name" "$filepart" "$file_extension"
 }
 
-declare movie 
-for movie in "lotr" "lotr_1_fotr" "lotr_2_ttt" "lotr_3_rotk"; do
+main() {
+    local movie flavor page_size
 
-    for flavor in "scenes_and_headers" "scenes_only"; do
+    for movie in "lotr" "lotr_1_fotr" "lotr_2_ttt" "lotr_3_rotk"; do
 
-        # create fountain file
-        "${movie}_${flavor}" > "$(make_release_filename "$movie" "fountain" "$flavor")"
+        for flavor in "scenes_and_headers" "scenes_only"; do
 
-        # create pdf file
-        for page_size in "a4" "letter"; do
-            # wrap actually defaults to "letter" if "a4" is not present
-            "${movie}_${flavor}" | wrap pdf --page-size "$page_size" -o "$(make_release_filename "$movie" "pdf" "$page_size" "$flavor")"
+            # create fountain file
+            "${movie}_${flavor}" > "$(make_release_filename "$movie" "fountain" "$flavor")"
+
+            # create pdf file
+            for page_size in "a4" "letter"; do
+                # wrap actually defaults to "letter" if "a4" is not present
+                "${movie}_${flavor}" | wrap pdf --page-size "$page_size" -o "$(make_release_filename "$movie" "pdf" "$page_size" "$flavor")"
+            done
+
+            # create html file
+            "${movie}_${flavor}" | wrap html -o "$(make_release_filename "$movie" "html" "$flavor")"
         done
-
-        # create html file
-        "${movie}_${flavor}" | wrap html -o "$(make_release_filename "$movie" "html" "$flavor")"
     done
-done
+}
+
+main
