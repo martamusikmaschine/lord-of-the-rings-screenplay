@@ -1,0 +1,29 @@
+Title:
+    THE LORD OF THE RINGS
+    ‎
+    ‎
+    ##SUBTITLE##
+    - Extended Edition -
+    ‎
+    ‎
+    ‎
+    Original Screenplay by
+    ‎
+    Fran Walsh &
+    ‎
+    Philippa Boyens &
+    ‎
+    Peter Jackson
+    ‎
+    ‎
+    ‎
+    ‎
+    Based on the novels by J.R.R. Tolkien
+Draft date: ##DRAFTDATE##
+
+/* 'wrap' doesn't support multiline authors, hence the hack using non visible character 0x200e */
+
+/*
+The Lord of the Rings: ##SUBTITLE## - Extended Edition
+Title
+*/

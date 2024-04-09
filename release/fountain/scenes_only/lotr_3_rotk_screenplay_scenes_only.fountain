@@ -1,0 +1,29 @@
+Title:
+    THE LORD OF THE RINGS
+    ‎
+    ‎
+    The Return of the King
+    - Extended Edition -
+    ‎
+    ‎
+    ‎
+    Original Screenplay by
+    ‎
+    Fran Walsh &
+    ‎
+    Philippa Boyens &
+    ‎
+    Peter Jackson
+    ‎
+    ‎
+    ‎
+    ‎
+    Based on the novels by J.R.R. Tolkien
+Draft date: 2024-04-09
+
+/* 'wrap' doesn't support multiline authors, hence the hack using non visible character 0x200e */
+
+/*
+The Lord of the Rings: The Return of the King - Extended Edition
+Title
+*/
