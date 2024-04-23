@@ -17,13 +17,7 @@ jobs:
       run: ./install_dependencies.sh
 
     - name: Compile Output
-      run: ./release.sh
-
-    - name: Add Additional Files
-      run: |
-        printf "# DATE\n%s\n\n# VERSION\n%s\n", "$(date -u +'%Y-%m-%dT%H:%M:%SZ')", "${{ github.ref }}" >> release/VERSION.md
-        cp RELEASE.md release
-        cp LICENSE-CC-BY-NC-ND-4.0.md release
+      run: ./release.sh compress
 
     - name: Pack Build Artifacts
       run: tar -cvf release.tar ./release 
@@ -54,23 +48,33 @@ jobs:
       run: tar -xvf release.tar
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      uses: svenstaro/upload-release-action@v2
       with:
-        draft: false
-        prerelease: false
-        release_name: The Lord of the Rings - The Motion Picture Trilogy, Screenplay
-        tag_name: ${{ github.ref }}
-        body_path: release/RELEASE.md
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: release/zip/*.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
 
-    - name: Upload Release Files
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/pdf/a4/scenes_and_headers/lotr_screenplay_a4_scenes_and_headers.pdf
-        asset_name: test.pdf
-        asset_content_type: application/pdf
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ github.token }}
+#      with:
+#        draft: false
+#        prerelease: false
+#        release_name: The Lord of the Rings - The Motion Picture Trilogy, Screenplay
+#        tag_name: ${{ github.ref }}
+#        body_path: release/RELEASE.md
+#
+#    - name: Upload Release Files
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ github.token }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+#        asset_path: release/pdf/a4/scenes_and_headers/lotr_screenplay_a4_scenes_and_headers.pdf
+#        asset_name: test.pdf
+#        asset_content_type: application/pdf
+#

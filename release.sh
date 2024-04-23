@@ -173,13 +173,22 @@ main() {
     printf "\nAll files compiled.\n"
 
     if [ "${1:-}" = "compress" ]; then
+
         mkdir "$RELEASE_DIR/zip"
 
+        printf "# DATE\n%s\n\n# VERSION\n%s\n" "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "${GITHUB_REF:-local}" >> "$RELEASE_DIR/VERSION.md"
+
         printf "\nCompressing release directories.\n\n"
-        local zip_file_name foo
+        local zip_file_name foo compress_dir
+
         for foo in "${!release_directories[@]}"; do
             zip_file_name="${release_directories["$foo"]}"
-            zip -q -r -j "$RELEASE_DIR/zip/$zip_file_name" "$RELEASE_DIR/$foo"
+
+            compress_dir="$RELEASE_DIR/$foo"
+
+            cp "$RELEASE_DIR/VERSION.md" "$PROJECT_ROOT/RELEASE.md" "$PROJECT_ROOT/LICENSE-CC-BY-NC-ND-4.0.md" "$compress_dir"
+
+            zip -q -r -j "$RELEASE_DIR/zip/$zip_file_name" "$compress_dir"
             printf "%s\n" "$zip_file_name"
         done
 
