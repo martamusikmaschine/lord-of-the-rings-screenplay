@@ -105,6 +105,8 @@ make_release_filename() {
     local dirpart
     dirpart=$(printf '%s/' "${@// /|}")
 
+    mkdir -p "$RELEASE_DIR/$dirpart"
+
     local file_extension
     file_extension="$1"
     shift
@@ -116,25 +118,43 @@ make_release_filename() {
 }
 
 main() {
+    printf "Compiling screenplay.\n\n"
+
     local movie flavor page_size
+    local -i file_count=0
+
+    printf " |------------------------------------------------------|\n"
+    printf " | %-2s | %-11s | %-18s | %-12s |\n" "#" "Movie" "Flavor" "Format"
+    printf " |----+-------------+--------------------+--------------|\n"
 
     for movie in "lotr" "lotr_1_fotr" "lotr_2_ttt" "lotr_3_rotk"; do
 
         for flavor in "scenes_and_headers" "scenes_only"; do
+            page_size="-"
 
             # create fountain file
+            file_count=$((file_count+1))
             "${movie}_${flavor}" > "$(make_release_filename "$movie" "fountain" "$flavor")"
-
-            # create pdf file
-            for page_size in "a4" "letter"; do
-                # wrap actually defaults to "letter" if "a4" is not present
-                "${movie}_${flavor}" | wrap pdf --page-size "$page_size" -o "$(make_release_filename "$movie" "pdf" "$page_size" "$flavor")"
-            done
+            printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "fountain" 
 
             # create html file
+            file_count=$((file_count+1))
             "${movie}_${flavor}" | wrap html -o "$(make_release_filename "$movie" "html" "$flavor")"
+            printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "html" 
+
+            for page_size in "a4" "letter"; do
+                # create pdf file
+                file_count=$((file_count+1))
+                # wrap actually defaults to "letter" if "a4" is not present
+                "${movie}_${flavor}" | wrap pdf --page-size "$page_size" -o "$(make_release_filename "$movie" "pdf" "$page_size" "$flavor")"
+                printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "pdf ($page_size)" 
+
+            done
         done
     done
+    printf " |------------------------------------------------------|\n\n"
+    printf "Success.\n"
+
 }
 
 main
