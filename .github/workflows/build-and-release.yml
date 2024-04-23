@@ -26,7 +26,7 @@ jobs:
         cp LICENSE-CC-BY-NC-ND-4.0.md release
 
     - name: Pack Build Artifacts
-      run: tar -cvf release.tar ./release
+      run: tar -cvf release.tar ./release 
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
@@ -52,30 +52,6 @@ jobs:
 
     - name: Unpack Local Build Artifacts
       run: tar -xvf release.tar
-
-    - name: Pack fountain scenes_and_headers
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes and Headers Fountain.zip" "release/fountain/scenes_and_headers"
-
-    - name: Pack fountain scenes_only
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes only Fountain.zip" "release/fountain/scenes_only"
-
-    - name: Pack html scenes_and_headers
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes and Headers HTML.zip" "release/html/scenes_and_headers"
-
-    - name: Pack html scenes_only
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes only HTML.zip" "release/html/scenes_only"
-
-    - name: Pack pdf scenes_and_headers a4
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes and Headers PDF A4.zip" "release/pdf/a4/scenes_and_headers"
-
-    - name: Pack pdf scenes_and_headers letter
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes and Headers PDF Letter.zip" "release/pdf/letter/scenes_and_headers"
-
-    - name: Pack pdf scenes_only a4
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes only PDF A4.zip" "release/pdf/a4/scenes_only"
-
-    - name: Pack pdf scenes_only letter
-      run: zip -r -j "release/Lord of the Rings Screenplay Scenes only PDF Letter.zip" "release/pdf/letter/scenes_only"
 
     - name: Create Release
       id: create_release

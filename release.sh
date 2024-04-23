@@ -30,15 +30,15 @@ declare DRAFT_DATE
 DRAFT_DATE="$(date +%Y-%m-%d)"
 declare -r DRAFT_DATE
 
-declare -A MOVIE_TITLES
-MOVIE_TITLES["lotr"]="The Motion Picture Trilogy"
-MOVIE_TITLES["lotr_1_fotr"]="The Fellowship of the Ring"
-MOVIE_TITLES["lotr_2_ttt"]="The two Towers"
-MOVIE_TITLES["lotr_3_rotk"]="The Return of the King"
-declare -r MOVIE_TITLES
+declare -A MOVIE_SUBTITLES
+MOVIE_SUBTITLES["lotr"]="The Motion Picture Trilogy"
+MOVIE_SUBTITLES["lotr_1_fotr"]="The Fellowship of the Ring"
+MOVIE_SUBTITLES["lotr_2_ttt"]="The two Towers"
+MOVIE_SUBTITLES["lotr_3_rotk"]="The Return of the King"
+declare -r MOVIE_SUBTITLES
 
 cat_title() {
-    sed -e "s/##DRAFTDATE##/$DRAFT_DATE/g" -e "s/##SUBTITLE##/${MOVIE_TITLES[$1]}/g" "$SCENES_DIR/lotr.title.fountain" 
+    sed -e "s/##DRAFTDATE##/$DRAFT_DATE/g" -e "s/##SUBTITLE##/${MOVIE_SUBTITLES[$1]}/g" "$SCENES_DIR/lotr.title.fountain" 
 }
 
 sort_and_cat() {
@@ -57,103 +57,121 @@ find_headers() {
     find_fountain "$SCENES_DIR/$1/header"
 }
 
-movie_scenes_only() {
+cat_movie_scenes_only() {
     cat_title "$1" && find_scenes_only "$1" | sort_and_cat
 }
 
-movie_scenes_and_headers() {
+cat_movie_scenes_and_headers() {
     cat_title "$1" && ( find_scenes_only "$1" && find_headers "$1" ) | sort_and_cat
 }
 
-lotr_1_fotr_scenes_only() {
-    movie_scenes_only "lotr_1_fotr"
+cat_lotr_1_fotr_scenes_only() {
+    cat_movie_scenes_only "lotr_1_fotr"
 }
 
-lotr_1_fotr_scenes_and_headers() {
-    movie_scenes_and_headers "lotr_1_fotr"
+cat_lotr_1_fotr_scenes_and_headers() {
+    cat_movie_scenes_and_headers "lotr_1_fotr"
 }
 
-lotr_2_ttt_scenes_only() {
-    movie_scenes_only "lotr_2_ttt"
+cat_lotr_2_ttt_scenes_only() {
+    cat_movie_scenes_only "lotr_2_ttt"
 }
 
-lotr_2_ttt_scenes_and_headers() {
-    movie_scenes_and_headers "lotr_2_ttt"
+cat_lotr_2_ttt_scenes_and_headers() {
+    cat_movie_scenes_and_headers "lotr_2_ttt"
 }
 
-lotr_3_rotk_scenes_only() {
-    movie_scenes_only "lotr_3_rotk"
+cat_lotr_3_rotk_scenes_only() {
+    cat_movie_scenes_only "lotr_3_rotk"
 }
 
-lotr_3_rotk_scenes_and_headers() {
-    movie_scenes_and_headers "lotr_3_rotk"
+cat_lotr_3_rotk_scenes_and_headers() {
+    cat_movie_scenes_and_headers "lotr_3_rotk"
 }
 
-lotr_scenes_only() {
+cat_lotr_scenes_only() {
     cat_title "lotr" && ( find_scenes_only "lotr_1_fotr" && find_scenes_only "lotr_2_ttt" && find_scenes_only "lotr_3_rotk" ) | sort_and_cat
 }
 
-lotr_scenes_and_headers() {
+cat_lotr_scenes_and_headers() {
     cat_title "lotr" && ( find_scenes_only "lotr_1_fotr" && find_scenes_only "lotr_2_ttt" && find_scenes_only "lotr_3_rotk" && find_headers "lotr_1_fotr" && find_headers "lotr_2_ttt" && find_headers "lotr_3_rotk" ) | sort_and_cat
 }
 
-make_release_filename() {
-    local name
-    name="$1_screenplay"
-    shift
-
-    local dirpart
-    dirpart=$(printf '%s/' "${@// /|}")
-
-    mkdir -p "$RELEASE_DIR/$dirpart"
-
-    local file_extension
-    file_extension="$1"
-    shift
-
-    local filepart
-    filepart=$(printf '_%s' "${@// /|}")
-
-    printf "%s/%s%s%s.%s\n" "$RELEASE_DIR" "$dirpart" "$name" "$filepart" "$file_extension"
-}
-
-main() {
-    printf "Compiling screenplay.\n\n"
-
-    local movie flavor page_size
-    local -i file_count=0
-
+print_table_header() {
     printf " |------------------------------------------------------|\n"
     printf " | %-2s | %-11s | %-18s | %-12s |\n" "#" "Movie" "Flavor" "Format"
     printf " |----+-------------+--------------------+--------------|\n"
+}
+
+print_table_row() {
+    printf " | %-2d | %-11s | %-18s | %-12s |\n" "$release_file_count" "$movie" "$flavor" "$format"
+}
+
+# We start at 1 so we can use ((foo++)) which fails if foo is 0
+declare -i release_file_count=1
+
+declare current_release_filename
+
+declare -A release_directories
+
+make_release_filename() {
+    local -r file_extension="$1"
+    shift
+
+    local target_dir="$file_extension/${@// /|}/$flavor"
+
+    local format="$file_extension"
+
+    local more_flavor=""
+
+    if [ $# -eq 1 ]; then
+        format="$format ($1)"
+        more_flavor="-$1"
+    fi
+
+    release_directories["$target_dir"]="The_Lord_of_the_Rings-Screenplay-${flavor}-${file_extension}${more_flavor}"
+    target_dir="$RELEASE_DIR/$target_dir"
+
+    mkdir -p "$target_dir"
+    current_release_filename="$target_dir/screenplay-${movie}-${flavor}${more_flavor}.${file_extension}"
+    ((release_file_count++))
+
+    print_table_row
+}
+
+main() {
+    printf "Removing release directory.\n"
+    rm -rf "$RELEASE_DIR" || true
+
+    local movie flavor
+
+    printf "Compiling screenplay.\n\n"
+    print_table_header
 
     for movie in "lotr" "lotr_1_fotr" "lotr_2_ttt" "lotr_3_rotk"; do
-
         for flavor in "scenes_and_headers" "scenes_only"; do
-            page_size="-"
 
-            # create fountain file
-            file_count=$((file_count+1))
-            "${movie}_${flavor}" > "$(make_release_filename "$movie" "fountain" "$flavor")"
-            printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "fountain" 
+            make_release_filename "pdf" "a4"
+            "cat_${movie}_${flavor}" | wrap pdf --page-size "a4" -o "$current_release_filename"
 
-            # create html file
-            file_count=$((file_count+1))
-            "${movie}_${flavor}" | wrap html -o "$(make_release_filename "$movie" "html" "$flavor")"
-            printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "html" 
+            make_release_filename "pdf" "letter"
+            "cat_${movie}_${flavor}" | wrap pdf --page-size "letter" -o "$current_release_filename"
 
-            for page_size in "a4" "letter"; do
-                # create pdf file
-                file_count=$((file_count+1))
-                # wrap actually defaults to "letter" if "a4" is not present
-                "${movie}_${flavor}" | wrap pdf --page-size "$page_size" -o "$(make_release_filename "$movie" "pdf" "$page_size" "$flavor")"
-                printf " | %-2d | %-11s | %-18s | %-12s |\n" "$file_count" "$movie" "$flavor" "pdf ($page_size)" 
+            make_release_filename "html"
+            "cat_${movie}_${flavor}" | wrap html -o "$current_release_filename"
 
-            done
+            make_release_filename "fountain"
+            "cat_${movie}_${flavor}" > "$current_release_filename"
+
         done
     done
+
     printf " |------------------------------------------------------|\n\n"
-    printf "Success.\n"
+    printf "All files compiled.\n\n"
+
+    for foo in "${!release_directories[@]}"; do
+        echo ${release_directories["$foo"]}
+    done
 
 }
 
