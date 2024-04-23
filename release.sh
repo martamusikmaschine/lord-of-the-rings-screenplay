@@ -118,7 +118,7 @@ make_release_filename() {
     local -r file_extension="$1"
     shift
 
-    local target_dir="$file_extension/${@// /|}/$flavor"
+    local target_dir="$file_extension/${*// /|}/$flavor"
 
     local format="$file_extension"
 
@@ -129,11 +129,14 @@ make_release_filename() {
         more_flavor="-$1"
     fi
 
-    release_directories["$target_dir"]="The_Lord_of_the_Rings-Screenplay-${flavor}-${file_extension}${more_flavor}"
+    release_directories["$target_dir"]="Screenplay-The_Lord_of_the_Rings-${flavor}-${file_extension}${more_flavor}.zip"
     target_dir="$RELEASE_DIR/$target_dir"
 
     mkdir -p "$target_dir"
-    current_release_filename="$target_dir/screenplay-${movie}-${flavor}${more_flavor}.${file_extension}"
+
+    declare -r movie_title="The_Lord_of_the_Rings-${MOVIE_SUBTITLES[$movie]// /_}"
+
+    current_release_filename="$target_dir/Screenplay-${movie_title}-${flavor}${more_flavor}.${file_extension}"
     ((release_file_count++))
 
     print_table_row
@@ -166,13 +169,23 @@ main() {
         done
     done
 
-    printf " |------------------------------------------------------|\n\n"
-    printf "All files compiled.\n\n"
+    printf " |------------------------------------------------------|\n"
+    printf "\nAll files compiled.\n"
 
-    for foo in "${!release_directories[@]}"; do
-        echo ${release_directories["$foo"]}
-    done
+    if [ "${1:-}" = "compress" ]; then
+        mkdir "$RELEASE_DIR/zip"
+
+        printf "\nCompressing release directories.\n\n"
+        local zip_file_name foo
+        for foo in "${!release_directories[@]}"; do
+            zip_file_name="${release_directories["$foo"]}"
+            zip -q -r -j "$RELEASE_DIR/zip/$zip_file_name" "$RELEASE_DIR/$foo"
+            printf "%s\n" "$zip_file_name"
+        done
+
+        printf "\nAll files compressed.\n"
+    fi
 
 }
 
-main
+main "$@"
