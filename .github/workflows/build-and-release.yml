@@ -47,34 +47,23 @@ jobs:
     - name: Unpack Local Build Artifacts
       run: tar -xvf release.tar
 
+    - name: Setup RELEASE.md
+        id: setup_release
+        shell: bash
+        run: |
+          r=$(cat release/RELEASE.md)
+          r="${r//'%'/'%25'}"
+          r="${r//$'\n'/'%0A'}"
+          r="${r//$'\r'/'%0D'}"
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+
     - name: Create Release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: release/zip/*.zip
         tag: ${{ github.ref }}
+        release_name: "The Lord of the Rings - The Motion Picture Trilogy, Screenplay"
         overwrite: true
         file_glob: true
-
-#    - name: Create Release
-#      id: create_release
-#      uses: actions/create-release@v1
-#      env:
-#        GITHUB_TOKEN: ${{ github.token }}
-#      with:
-#        draft: false
-#        prerelease: false
-#        release_name: The Lord of the Rings - The Motion Picture Trilogy, Screenplay
-#        tag_name: ${{ github.ref }}
-#        body_path: release/RELEASE.md
-#
-#    - name: Upload Release Files
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ github.token }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }}
-#        asset_path: release/pdf/a4/scenes_and_headers/lotr_screenplay_a4_scenes_and_headers.pdf
-#        asset_name: test.pdf
-#        asset_content_type: application/pdf
-#
+        body: ${{ steps.setup_release.outputs.RELEASE_BODY }}

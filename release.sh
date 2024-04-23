@@ -178,6 +178,8 @@ main() {
 
         printf "# DATE\n%s\n\n# VERSION\n%s\n" "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "${GITHUB_REF:-local}" >> "$RELEASE_DIR/VERSION.md"
 
+        cp "$PROJECT_ROOT/RELEASE.md" "$RELEASE_DIR"
+        
         printf "\nCompressing release directories.\n\n"
         local zip_file_name foo compress_dir
 
