@@ -17,10 +17,10 @@ jobs:
       run: ./install_dependencies.sh
 
     - name: Compile Output
-      run: ./release.sh compress
+      run: ./compile.sh release
 
     - name: Pack Build Artifacts
-      run: tar -cvf release.tar ./release 
+      run: tar -cvf release.tar release
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
@@ -39,7 +39,7 @@ jobs:
       with:
         name: release
 
-    - name: Delete Remote Build Artifact
+    - name: Delete Remote Build Artifacts
       uses: geekyeggo/delete-artifact@v5
       with:
         name: release
@@ -47,7 +47,7 @@ jobs:
     - name: Unpack Local Build Artifacts
       run: tar -xvf release.tar
 
-    - name: Setup RELEASE.md
+    - name: Setup Release
       id: setup_release
       shell: bash
       run: |
@@ -61,7 +61,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: release/zip/*.zip
+        file: release/*.{zip,pdf}
         tag: ${{ github.ref }}
         release_name: "The Lord of the Rings - The Motion Picture Trilogy, Screenplay"
         overwrite: true

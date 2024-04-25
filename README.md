@@ -1,10 +1,11 @@
 # TL;DR
 
-This is a Work-in-progress project.
+This is a work-in-progress project.
 The work is not done yet.
-You need to help me!
+You are invited to help me.
 
-"The Lord of the Rings" Screenplay: [The most recent version as PDF file](/release/pdf/letter/scenes_and_headers/lotr_screenplay_letter_scenes_and_headers.pdf).
+"The Lord of the Rings" Screenplay:
+The most recent version as PDF file](/releases).
 
 You can find different versions [here](release).
 
