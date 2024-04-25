@@ -84,9 +84,11 @@ There's tons of information available, the most important topic for our use-case
 
 # Compile and Release
 
-Just call the [compile script][compile.sh] on your local commandline in order to create various formatted output files.
+Just call the [compile script][compile.sh] on your local linux commandline in order to create various formatted output files.
 
-A [github workflow](.github/workflows/build-and-release.yml) is used to release new versions whenever new scenes are added.
+For this to work, you most probably need to install the dependencies by calling [the appropriate script](install_dependencies.sh) before.
+
+A [github workflow](.github/workflows/build-and-release.yml) is used to release new versions whenever new scenes are added to the project.
 
 # License
 

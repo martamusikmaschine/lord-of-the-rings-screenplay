@@ -4,8 +4,6 @@ set -e
 set -u
 set -o pipefail
 
-set -x
-
 declare PROJECT_ROOT
 PROJECT_ROOT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 declare -r PROJECT_ROOT
@@ -35,9 +33,8 @@ declare -r SCENES_DIR
 declare DRAFT_DATE
 DRAFT_DATE="$(date +%Y-%m-%d)"
 if [ "${GITHUB_REF:-}" != "" ]; then
-    DRAFT_DATE="${GITHUB_REF:8}, $DRAFT_DATE"
+    DRAFT_DATE="${GITHUB_REF:10}, $DRAFT_DATE"
 fi
-
 declare -r DRAFT_DATE
 
 declare -A MOVIE_SUBTITLES
