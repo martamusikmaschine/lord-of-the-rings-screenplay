@@ -1,19 +1,18 @@
 # TL;DR
 
-This is a Work-in-progress project.
+This project compiles a fan-written screenplay version of "The Lord of the Rings".
+
+This is a work-in-progress.
 The work is not done yet.
-You need to help me!
+You are invited to help me.
 
-"The Lord of the Rings" Screenplay: [The most recent version as PDF file](/release/pdf/letter/scenes_and_headers/lotr_screenplay_letter_scenes_and_headers.pdf).
+## PDF version
 
-You can find different versions [here](release).
+Download the [current PDF file](https://github.com/martamusikmaschine/lord-of-the-rings-screenplay/releases/latest/download/Screenplay-The_Lord_of_the_Rings-The_Motion_Picture_Trilogy-scenes_no_headers-letter.pdf).
 
-They are based on [TK421's](https://www.tk421.net/lotr/film/) film scripts.
-Slightly adjusted versions used as a **template** (i.e. it does **not** meet my formatting and style criteria) can be found here:
+## Other formats
 
-* [The Fellowship of the Ring](scenes/lotr_1_fotr/template/lotr_1_fotr.template.pdf)
-* [The Two Towers](scenes/lotr_2_ttt/template/lotr_2_ttt.template.pdf)
-* [The Return of the King](scenes/lotr_3_rotk/template/lotr_3_rotk.template.pdf)
+You can find the most recent, compiled version in different formats under [releases](https://github.com/martamusikmaschine/lord-of-the-rings-screenplay/releases).
 
 # Idea
 
@@ -31,7 +30,16 @@ Eventually, all the info and handwritten notes could flow back into the source a
 There's already n different projects dedicated to compiling the content of the LOTR motion picture trilogy.
 This is n+1.
 
-Find out more about the alternatives [here](movie_scripts.md).
+## TK421
+
+The content is based on [TK421's](https://www.tk421.net/lotr/film/) film scripts.
+Slightly adjusted versions used as a **template** (i.e. it does **not** meet my formatting and style criteria) can be found here:
+
+* [The Fellowship of the Ring](scenes/lotr_1_fotr/template/lotr_1_fotr.template.pdf)
+* [The Two Towers](scenes/lotr_2_ttt/template/lotr_2_ttt.template.pdf)
+* [The Return of the King](scenes/lotr_3_rotk/template/lotr_3_rotk.template.pdf)
+
+Find out more about other alternatives [here](movie_scripts.md).
 
 # File Formats
 
@@ -78,8 +86,16 @@ There's tons of information available, the most important topic for our use-case
 13. Follow attentively
 14. Compare your result with the previous and next scene (if available) and check if it fits well
 15. Go back to 9 and apply necessary changes
-16. Compile the updated release files
 17. Merge with main
+18. Tag version and trigger automatic release
+
+# Compile and Release
+
+Just call the [compile script][compile.sh] on your local linux commandline in order to create various formatted output files.
+
+For this to work, you most probably need to install the dependencies by calling [the appropriate script](install_dependencies.sh) before.
+
+A [github workflow](.github/workflows/build-and-release.yml) is used to release new versions whenever new scenes are added to the project.
 
 # License
 
