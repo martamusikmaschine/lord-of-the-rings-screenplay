@@ -10,5 +10,4 @@ The release tag (version) gives you an idea about the progress of this project.
 Version numbers have the format vMOVIE.SCENE.PATCH.
 
 So v2.14.8 means Movie 2, Scene 14 has been completed and it is the 8th patch.
-
 The screenplay is not complete until v3.76.0.
