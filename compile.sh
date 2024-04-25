@@ -4,6 +4,8 @@ set -e
 set -u
 set -o pipefail
 
+set -x
+
 declare PROJECT_ROOT
 PROJECT_ROOT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 declare -r PROJECT_ROOT
