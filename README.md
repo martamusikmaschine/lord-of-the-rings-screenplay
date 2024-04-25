@@ -1,10 +1,17 @@
 # TL;DR
 
-This is a work-in-progress project.
+This project compiles a fan-written screenplay version of "The Lord of the Rings".
+
+This is a work-in-progress.
 The work is not done yet.
 You are invited to help me.
 
-"The Lord of the Rings" Screenplay:
+## PDF version
+
+Download the [current PDF file](https://github.com/martamusikmaschine/lord-of-the-rings-screenplay/releases/latest/download/Screenplay-The_Lord_of_the_Rings-The_Motion_Picture_Trilogy-scenes_no_headers-letter.pdf).
+
+## Other formats
+
 You can find the most recent, compiled version in different formats under [releases](https://github.com/martamusikmaschine/lord-of-the-rings-screenplay/releases).
 
 # Idea

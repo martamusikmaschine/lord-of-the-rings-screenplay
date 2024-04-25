@@ -189,7 +189,7 @@ main() {
         mkdir "$RELEASE_DIR"
 
         printf "Copying main screenplay pdf file.\n"
-        cp "$LOTR_SCRIPT_PDF" "$RELEASE_DIR"
+        cp "$PROJECT_ROOT/RELEASE.md" "$LOTR_SCRIPT_PDF" "$RELEASE_DIR"
 
         printf "Creation version file.\n"
         printf "# DATE\n%s\n\n# VERSION\n%s\n" "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "${GITHUB_REF:-local}" >> "$COMPILATION_DIR/VERSION.md"
